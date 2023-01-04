@@ -1,5 +1,5 @@
 Package: lmodweb
-Version: 0.0.0-9003
+Version: 0.0.0-9004
 Imports:
     gtools,
     utils,
@@ -12,5 +12,5 @@ Authors@R: c(person("Henrik", "Bengtsson", role=c("aut", "cre", "cph"),
 Description: Parses Lmod environment modules and compiles them into HTML.
 License: GPL-3
 LazyLoad: TRUE
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)

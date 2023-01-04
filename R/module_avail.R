@@ -1,3 +1,5 @@
+#' Get All Environment Modules in a Module Path
+#'
 #' @param info ...
 #'
 #' @param onMissingPath ...
@@ -10,6 +12,7 @@
 #' @importFrom R.utils mstr
 #' @importFrom jsonlite fromJSON
 #' @importFrom utils file_test
+#' @importFrom gtools mixedorder
 #' @export
 module_avail <- local({
   ## Memoization
@@ -75,6 +78,10 @@ module_avail <- local({
     stopifnot(is.numeric(ns), !anyNA(ns))
     x <- x[ns > 0, ]
 
+    ## Mixed sort by module name, e.g. miniconda3-py39 < miniconda3-py310
+    o <- mixedorder(info$package)
+    info <- lapply(info, FUN = function(set) set[o])
+    
     attr(x, "info") <- info
     message("done")
 

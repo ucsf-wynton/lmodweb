@@ -1,3 +1,9 @@
+#' Get All Environment Modules in a Module Path
+#'
+#' @param module_repositories ...
+#'
+#' @return A list ...
+#'
 #' @export
 get_modules_sets <- function(module_repositories) {
   modules_sets <- lapply(names(module_repositories), FUN = function(name) {

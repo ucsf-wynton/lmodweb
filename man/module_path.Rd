@@ -2,6 +2,7 @@
 % Please edit documentation in R/module_path.R
 \name{module_path}
 \alias{module_path}
+\alias{MODULEPATH}
 \title{Get the module path}
 \usage{
 module_path()
@@ -10,5 +11,5 @@ module_path()
 A character vector of environment module folders.
 }
 \description{
-Get the module path
+Parses environment variable \code{MODULEPATH}.
 }

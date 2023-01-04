@@ -1,3 +1,9 @@
+#' Parses one Module Environment
+#'
+#' @param m A list ...
+#'
+#' @return A list of length `length(x)` ...
+#'
 #' @importFrom gtools mixedsort
 #' @importFrom R.utils cstr
 #' @export

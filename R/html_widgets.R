@@ -1,3 +1,9 @@
+#' Output HTML JQuery Navigation Buttons
+#'
+#' @param modules_sets A named list ...
+#'
+#' @return Nothing.
+#'
 #' @export
 repos_buttons <- function(modules_sets) {
   cat('<ul class="nav nav-pills">\n')
@@ -8,4 +14,5 @@ repos_buttons <- function(modules_sets) {
     cat('<li', if (kk == 1) ' class="active"', '><a data-toggle="pill" href="#button_repository_', tolower(name), '"><span style="font-weight: bold;">', name, '</span>&nbsp;(', nbr_of_modules, ')</a></li>\n', sep = "")
   }
   cat('</ul>\n')
+  invisible(NULL)
 }

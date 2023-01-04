@@ -1,3 +1,5 @@
+#' Module Spider on a Module Path
+#'
 #' @param module_path A folder with environment modules.
 #'
 #' @param force If FALSE, and results are already cached, then the
