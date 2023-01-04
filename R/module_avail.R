@@ -50,7 +50,13 @@ module_avail <- local({
 
     json <- spider(module_path, force = force)
     x <- fromJSON(json)
-    o <- order(x$package)
+
+
+    ## Mixed sort by module name, e.g. miniconda3-py39 < miniconda3-py310
+    ## WORKAROUND: Make 'bowtie' come before 'bowtie'
+    tweaked_names <- paste0(x$package, "0")
+    o <- mixedorder(tweaked_names)
+    
     x <- x[o,]
     keep <- !grepl("^[.]", x$package)
     x <- x[keep,]
@@ -78,10 +84,6 @@ module_avail <- local({
     stopifnot(is.numeric(ns), !anyNA(ns))
     x <- x[ns > 0, ]
 
-    ## Mixed sort by module name, e.g. miniconda3-py39 < miniconda3-py310
-    o <- mixedorder(info$package)
-    info <- lapply(info, FUN = function(set) set[o])
-    
     attr(x, "info") <- info
     message("done")
 
