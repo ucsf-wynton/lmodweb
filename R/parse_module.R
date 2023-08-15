@@ -54,7 +54,7 @@ parse_module <- function(m) {
 
   ## Extract 'Nnnn: ' content from the end.
   if (length(m$description) > 0L) {
-    pattern <- "(.*)[[:space:]]+(Examples?|Note|Warning|Maintainer):[[:space:]]+(.*)"
+    pattern <- "(.*)[[:space:]]+(Examples?|Note|Warning|Maintainer|Requirements?):[[:space:]]+(.*)"
     while(grepl(pattern, m$description)) {
       name <- gsub(pattern, "\\2", m$description)
       name <- sub("s$", "", name)
@@ -83,7 +83,7 @@ parse_module <- function(m) {
   }
 
   ## Trim fields
-  for (field in c("description", "url", "warning")) {
+  for (field in c("description", "url", "warning", "requirement")) {
     if (is.null(m[[field]])) next
     if (is.na(m[[field]])) m[[field]] <- NULL
   }
