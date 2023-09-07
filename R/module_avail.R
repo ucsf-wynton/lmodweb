@@ -83,9 +83,13 @@ module_avail <- local({
       ## Find (maximum) default version
       ## WORKAROUND: replace . with _ to get 1.9 get before 1.10
       default <- x$defaultVersionName[idxs]
-      o <- mixedorder(gsub(".", "_", default, fixed = TRUE))
-      default <- default[o]
-      default <- default[length(default)]
+      ## Ignore hidden modules
+      default <- grep("^[^.]", default, value = TRUE)
+      if (length(default) > 1L) {
+        o <- mixedorder(gsub(".", "_", default, fixed = TRUE))
+        default <- default[o]
+        default <- default[length(default)]
+      }	
       x$defaultVersionName[[idxs[1]]] <- default
 
       ## Hide the already merged ones by setting their versions to an
