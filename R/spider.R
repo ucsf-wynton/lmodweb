@@ -11,9 +11,11 @@
 #' @importFrom utils file_test
 #' @export
 spider <- function(module_path, force = FALSE) {
+  stopifnot(length(module_path) == 1L)
+  
   debug <- getOption("lmodweb.debug", FALSE)
   if (debug) message(sprintf("spider('%s') ...", module_path))
-  
+
   ## Already on file?
   pathname <- file.path("lmod_data", sprintf("%s.json", module_path))
   if (debug) message("- pathname: ", pathname)
