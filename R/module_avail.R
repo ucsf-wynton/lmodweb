@@ -73,12 +73,21 @@ module_avail <- local({
     for (pkg in names(t)) {
       idxs <- which(x$package == pkg)
       versions <- do.call(rbind, x$versions[idxs])
-      ## Sort (because now they might be out of order)
+      
+      ## Sort (because now versions might be out of order)
       ## WORKAROUND: replace . with _ to get 1.9 get before 1.10
       o <- mixedorder(gsub(".", "_", versions$versionName, fixed = TRUE))
       versions <- versions[o, ]
-
       x$versions[[idxs[1]]] <- versions
+
+      ## Find (maximum) default version
+      ## WORKAROUND: replace . with _ to get 1.9 get before 1.10
+      default <- x$defaultVersionName[idxs]
+      o <- mixedorder(gsub(".", "_", default, fixed = TRUE))
+      default <- default[o]
+      default <- default[length(default)]
+      x$defaultVersionName[[idxs[1]]] <- default
+
       ## Hide the already merged ones by setting their versions to an
       ## empty list (see below)
       for (idx in idxs[-1]) x$versions[[idx]] <- list()

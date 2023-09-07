@@ -79,7 +79,7 @@ parse_module <- function(m) {
   } else {
     ## The module does not have versions
     cstr(list(idx = idx, names = names, default = m[["version"]][idx], versions = m$versions[[1]], default = m$versions[[1]][idx, ], path=m$versions[[1]][idx,"path"]))
-    stop("INTERNAL ERROR: Should not happen")
+    stop("INTERNAL ERROR: Should not happen; the module does not have versions")
   }
 
   ## Trim fields
