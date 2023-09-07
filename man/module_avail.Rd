@@ -6,12 +6,15 @@
 \usage{
 module_avail(
   info,
+  distros = character(0L),
   onMissingPath = getOption("onMissingPath", c("okay", "error", "warning", "ignore")),
   force = FALSE
 )
 }
 \arguments{
 \item{info}{...}
+
+\item{distros}{(optional) Character vector of Linux-distribution specific software to list.}
 
 \item{onMissingPath}{...}
 

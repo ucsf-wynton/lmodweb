@@ -2,6 +2,8 @@
 #'
 #' @param info ...
 #'
+#' @param distros (optional) Character vector of Linux-distribution specific software to list.
+#'
 #' @param onMissingPath ...
 #'
 #' @param force If TRUE, cached results are ignored.
@@ -18,7 +20,7 @@ module_avail <- local({
   ## Memoization
   .cache <- list()
   
-  function(info, onMissingPath = getOption("onMissingPath", c("okay", "error", "warning", "ignore")), force = FALSE) {
+  function(info, distros = character(0L), onMissingPath = getOption("onMissingPath", c("okay", "error", "warning", "ignore")), force = FALSE) {
     stopifnot(is.list(info), "module_path" %in% names(info))
     onMissingPath <- match.arg(onMissingPath)
     stopifnot(length(force) == 1L, is.logical(force), !is.na(force))
@@ -52,10 +54,20 @@ module_avail <- local({
     x <- fromJSON(json)
 
     ## SPECIAL: Handle Linux-distribution-specific modules
-    ## (a) Drop Linux distribution prefixes, e.g. _centos7 and _rocky8
+    if (length(distros) > 0) {
+      pattern <- "_[[:alpha:]]+[[:digit:]_]*/"
+      idxs <- grep(pattern, x$package)
+      keep_pattern <- sprintf("_(%s)/", paste(distros, collapse = "|"))
+      keep <- grepl(keep_pattern, x$package[idxs])
+      ## Hide the ones for non-wanted distros by setting their versions
+      ## to empty list (see below)
+      for (idx in idxs[!keep]) x$versions[[idx]] <- list()
+    }
+    
+    ## (b) Drop Linux distribution prefixes, e.g. _centos7 and _rocky8
     x$package <- sub("_[[:alpha:]]+[[:digit:]_]*/", "", x$package)
 
-    ## (b) Merge
+    ## (c) Merge
     t <- table(x$package)
     t <- t[t > 1]
     for (pkg in names(t)) {

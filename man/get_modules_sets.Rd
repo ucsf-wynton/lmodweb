@@ -4,10 +4,12 @@
 \alias{get_modules_sets}
 \title{Get All Environment Modules in a Module Path}
 \usage{
-get_modules_sets(module_repositories)
+get_modules_sets(module_repositories, ...)
 }
 \arguments{
 \item{module_repositories}{...}
+
+\item{\dots}{Additional arguments passed to \code{\link[=module_avail]{module_avail()}}.}
 }
 \value{
 A list ...
