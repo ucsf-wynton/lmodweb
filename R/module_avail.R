@@ -51,9 +51,29 @@ module_avail <- local({
     json <- spider(module_path, force = force)
     x <- fromJSON(json)
 
+    ## SPECIAL: Handle Linux-distribution-specific modules
+    ## (a) Drop Linux distribution prefixes, e.g. _centos7 and _rocky8
+    x$package <- sub("_[[:alpha:]]+[[:digit:]_]*/", "", x$package)
 
+    ## (b) Merge
+    t <- table(x$package)
+    t <- t[t > 1]
+    for (pkg in names(t)) {
+      idxs <- which(x$package == pkg)
+      versions <- do.call(rbind, x$versions[idxs])
+      ## Sort (because now they might be out of order)
+      ## WORKAROUND: replace . with _ to get 1.9 get before 1.10
+      o <- mixedorder(gsub(".", "_", versions$versionName, fixed = TRUE))
+      versions <- versions[o, ]
+
+      x$versions[[idxs[1]]] <- versions
+      ## Hide the already merged ones by setting their versions to an
+      ## empty list (see below)
+      for (idx in idxs[-1]) x$versions[[idx]] <- list()
+    }
+    
     ## Mixed sort by module name, e.g. miniconda3-py39 < miniconda3-py310
-    ## WORKAROUND: Make 'bowtie' come before 'bowtie'
+    ## WORKAROUND: Make 'bowtie' come before 'bowtie2'
     tweaked_names <- paste0(x$package, "0")
     o <- mixedorder(tweaked_names)
     
@@ -77,6 +97,8 @@ module_avail <- local({
       }
       version
     })
+
+    ## Drop hidden modules
     ns <- vapply(versions, FUN.VALUE = NA_integer_, FUN = function(version) {
       ## Hidden modules have version == list()
       if (is.null(dim(version))) 0L else nrow(version)
