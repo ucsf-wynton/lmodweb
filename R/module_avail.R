@@ -67,6 +67,15 @@ module_avail <- local({
     ## (b) Drop Linux distribution prefixes, e.g. _centos7 and _rocky8
     x$package <- sub("_[[:alpha:]]+[[:digit:]_]*/", "", x$package)
 
+    ## (c0) Fix invalid versions$parent data frames
+    x$versions <- lapply(x$versions, function(version) {
+      parent <- version$parent
+      if (is.data.frame(parent)) {
+        if (ncol(parent) == 0L) version$parent <- vector("list", nrow(parent))
+      }
+      version
+    })
+
     ## (c) Merge
     t <- table(x$package)
     t <- t[t > 1]
